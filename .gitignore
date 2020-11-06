@@ -11,3 +11,5 @@ Cargo.lock
 
 # Idea Project files
 .idea
+
+*.zip
