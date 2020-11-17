@@ -1,12 +1,12 @@
 
 trait State {}
-trait Terminal {}
+trait Terminal:State {}
 
-trait Transition<T> /* TODO: Trait-Bounds */ {
+trait Transition<T> where T:State,Self:State{
 	fn transition(self) -> T;
 }
 
-trait Terminate /* TODO: Trait-Bounds */ {
+trait Terminate where Self:Terminal {
 	fn terminate(self);
 }
 
@@ -43,11 +43,11 @@ impl Terminate for End {
 }
 fn main() {
 	let state = Start::new();
-	// let state: End = state.transition(); // Compilezeitfehler
+	//let state: End = state.transition(); // Compilezeitfehler
 	let state: Loop = state.transition();
-	// state.terminate(); // Compilezeitfehler
+	//state.terminate(); // Compilezeitfehler
 	let state: Loop = state.transition();
-	// let state: Start = state.transition(); // Compilezeitfehler
+	//let state: Start = state.transition(); // Compilezeitfehler
 	let state: End = state.transition();
 	state.terminate();
 }
