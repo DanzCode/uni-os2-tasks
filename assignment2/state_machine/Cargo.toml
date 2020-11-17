@@ -1,0 +1,5 @@
+[package]
+name = "state_machine"
+version = "0.1.0"
+authors = ["You <you@your-computer.de>"]
+edition = "2018"
