@@ -11,33 +11,42 @@ impl<'a,T> StackVec<'a,T> {
 	/// store. The returned `StackVec` will be able to hold `storage.len()`
 	/// values.
 	fn new(storage: &'a mut [T]) -> Self {
-		unimplemented!()
+		Self {
+			storage,
+			len:0
+		}
 	}
 	
 	/// Appends a new element to this vector. Fails with `Err` if capacity
 	/// would be exceeded.
 	fn push(&mut self, e: T) -> Result<(),()> {
-		unimplemented!()
+		if self.len()<self.capacity()-1 {
+			self.storage[self.len()]=e;
+			self.len+=1;
+			Ok(())
+		} else {
+			Err(())
+		}
 	}
 	
 	/// Returns the number of elements this vector can hold.
 	fn capacity(&self) -> usize {
-		unimplemented!()
+		self.storage.len()
 	}
 	
 	/// Returns the number of elements in the vector.
 	fn len(&self) -> usize {
-		unimplemented!()
+		self.len
 	}
 	
 	/// Returns true if the vector contains no elements.
 	fn is_empty(&self) -> bool {
-		unimplemented!()
+		self.len()==0
 	}
 	
 	/// Extracts a slice containing the entire vector.
 	fn as_slice(&self) -> &[T] {
-		unimplemented!()
+		&self.storage[0..self.len()-1]
 	}
 }
 
@@ -45,7 +54,13 @@ impl<'a,T:Clone> StackVec<'a,T> {
 	/// If this vector is not empty, removes the last element from this vector
     /// by cloning it and returns it. Otherwise returns `None`.
 	fn pop(&mut self) -> Option<T> {
-		unimplemented!()
+		match self.is_empty() {
+			true=>None,
+			false=> {
+				self.len-=1;
+				Some(self.storage[self.len].clone())
+			}
+		}
 	}
 }
 
