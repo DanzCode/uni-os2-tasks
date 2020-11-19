@@ -1,0 +1,8 @@
+[package]
+name = "hilbert"
+version = "0.1.0"
+authors = ["You <you@your-computer.de>"]
+edition = "2018"
+
+[dependencies]
+turtle = "1.0.0-rc.3"
