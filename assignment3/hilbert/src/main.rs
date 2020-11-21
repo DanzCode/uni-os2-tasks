@@ -1,4 +1,4 @@
-use turtle::{Turtle, Drawing, Size};
+use turtle::{Turtle, Drawing};
 use std::cmp::{max, min};
 
 //A → -BF+AFA+FB-
@@ -24,7 +24,7 @@ enum MoveToken {
 
 impl MoveToken {
     fn execute(&self, turtle: &mut DecoratedTurtle) {
-        match (self) {
+        match self {
             Self::Left => turtle.left(),
             Self::Right => turtle.right(),
             Self::Forward => turtle.step()
@@ -32,6 +32,7 @@ impl MoveToken {
     }
 }
 
+#[allow(non_snake_case)]
 struct DerivationVariableMap {
     A: Vec<DerivationElement>,
     B: Vec<DerivationElement>,
@@ -40,14 +41,14 @@ struct DerivationVariableMap {
 impl DerivationVariableMap {
     fn derive(&self, start: &Vec<DerivationElement>, depth: usize) -> Vec<MoveToken> {
         match depth {
-             1 => start.iter().filter_map(|e| {
-                match e {
+             1 => start.iter().filter_map(|element| {
+                match element {
                     DerivationElement::Token(t) => Some(t.clone()),
                     DerivationElement::Variable(_) => None
                 }
             }).collect(),
-            _ => start.iter().flat_map(|e| {
-                match e {
+            _ => start.iter().flat_map(|element| {
+                match element {
                     DerivationElement::Token(t) => vec![t.clone()],
                     DerivationElement::Variable(v) => match v {
                         MoveVariable::A => self.derive(&self.A, depth - 1),
@@ -60,14 +61,14 @@ impl DerivationVariableMap {
 }
 
 fn parse_derivation(rule: &str) -> Vec<DerivationElement> {
-    rule.chars().map(|c| {
-        match c {
+    rule.chars().map(|char| {
+        match char {
             '-' => DerivationElement::Token(MoveToken::Left),
             '+' => DerivationElement::Token(MoveToken::Right),
             'F' => DerivationElement::Token(MoveToken::Forward),
             'A' => DerivationElement::Variable(MoveVariable::A),
             'B' => DerivationElement::Variable(MoveVariable::B),
-            _ => panic!("unknown token char {}", c)
+            _ => panic!("unknown token char {}", char)
         }
     }).collect()
 }
@@ -126,8 +127,12 @@ impl DecoratedTurtle {
     }
 }
 
-const DEPTH:usize=6;
+const DEPTH:usize=3;
 
+/*
+ ACHTUNG: Das window-sizing funktioniert (bei meinem Setup) nicht korrekt (bleibt immer im initialen Maximalstate).
+ Deswegen gibt es evt. Probleme mit Positionierung und Größe auf anderen Systemen
+ */
 fn main() {
     turtle::start();
     let mut dec_turtle=DecoratedTurtle::create(Turtle::new(),WindowSizeStrategy::Fixed(500),(1<<DEPTH)-1);
